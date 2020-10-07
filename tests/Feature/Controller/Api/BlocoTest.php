@@ -9,12 +9,12 @@ use Faker\Factory;
 
 class BlocoTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
     public function testCanReturnACollectionOfPaginatedBlocos()
     {
-        $bloco = $this->create('Bloco');
-        $bloco2 = $this->create('Bloco');
-        $bloco3 = $this->create('Bloco');
+        $bloco = $this->createBloco();
+        $bloco2 = $this->createBloco();
+        $bloco3 = $this->createBloco();
 
         $response = $this->json('get', '/api/bloco');
         $response->assertStatus(200)->assertJsonStructure([
@@ -22,7 +22,6 @@ class BlocoTest extends TestCase
                 '*' => ['id', 'numero', 'quantidade_apartamento', 'created_at', 'updated_at']
             ]
         ]);
-
     }
 
     public function testCanCreateABloco()
@@ -32,7 +31,7 @@ class BlocoTest extends TestCase
         $faker = Factory::create();
 
         $response = $this->json('post', '/api/bloco', [
-            'numero' => $name = $faker->name(),
+            'numero' => $name = $faker->unique()->randomDigit,
             'quantidade_apartamento' => $quantidade_apartamento = $faker->unique()->randomDigit,
             'condominio_id' => $condominio_id = factory(\App\Models\Condominio::class)->create()->id
         ])->assertJson([
@@ -52,7 +51,7 @@ class BlocoTest extends TestCase
     public function testCanReturnABloco()
     {
         // given
-        $bloco = $this->create('Bloco');
+        $bloco = $this->createBloco();
 
         // when
         $response = $this->json('get', '/api/bloco/'.$bloco->id);
@@ -83,7 +82,7 @@ class BlocoTest extends TestCase
     {
 
         $this->withoutExceptionHandling();
-        $bloco = $this->create('Bloco');
+        $bloco = $this->createBloco();
 
         $response = $this->json('put', '/api/bloco/'.$bloco->id, [
             'numero' => $bloco->numero.'_updated',
@@ -116,7 +115,7 @@ class BlocoTest extends TestCase
 
     public function testCanDeleteABloco()
     {
-        $bloco = $this->create('Bloco');
+        $bloco = $this->createBloco();
         $response = $this->json('delete', '/api/bloco/'.$bloco->id);
 
         $response->assertStatus(204)->assertSee(null);

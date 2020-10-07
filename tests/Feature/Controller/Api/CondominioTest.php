@@ -14,13 +14,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
  */
 class CondominioTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
     public function testCanReturnACollectionOfPaginatedCondominios()
     {
-        $condominio = $this->create('Condominio');
-        $condominio2 = $this->create('Condominio');
-        $condominio3 = $this->create('Condominio');
+        $condominio = $this->createCondominio();
+        $condominio2 = $this->createCondominio();
+        $condominio3 = $this->createCondominio();
 
         $response = $this->json('get', '/api/condominio');
         $response->assertStatus(200)->assertJsonStructure([
@@ -29,7 +29,7 @@ class CondominioTest extends TestCase
             ]
         ]);
 
-        Log::debug($response->getContent());
+        // Log::debug($response->getContent());
     }
 
     public function testCanCreateACondominio()
@@ -57,7 +57,7 @@ class CondominioTest extends TestCase
     public function testCanReturnACondominio()
     {
         // given
-        $condominio = $this->create('Condominio');
+        $condominio = $this->createCondominio();
 
         // when
         $response = $this->json('get', '/api/condominio/'.$condominio->id);
@@ -88,7 +88,7 @@ class CondominioTest extends TestCase
     {
 
         $this->withoutExceptionHandling();
-        $condominio = $this->create('Condominio');
+        $condominio = $this->createCondominio();
 
         $response = $this->json('put', '/api/condominio/'.$condominio->id, [
             'nome' => $condominio->nome.'_updated',
@@ -121,7 +121,7 @@ class CondominioTest extends TestCase
 
     public function testCanDeleteACondominio()
     {
-        $condominio = $this->create('Condominio');
+        $condominio = $this->createCondominio();
         $response = $this->json('delete', '/api/condominio/'.$condominio->id);
 
         $response->assertStatus(204)->assertSee(null);

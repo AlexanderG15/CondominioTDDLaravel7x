@@ -10,6 +10,6 @@ $factory->define(App\Models\Bloco::class, function (Faker $faker) {
         'numero' => $faker->unique()->randomDigit,
         'quantidade_apartamento' => $faker->unique()->randomDigit,
         // 'condominio_id' => $faker->unique()->numberBetween(1, App\Models\Condominio::count())
-        'condominio_id' => factory(Condominio::class)->create()->id
+        'condominio_id' => factory(Condominio::class)
     ];
 });
