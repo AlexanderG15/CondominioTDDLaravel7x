@@ -1,4 +1,4 @@
 language: php
-rvm:
- - 7.4
- - laravel
+php:
+  - '7.4.7'
+  - nightly
